@@ -1,0 +1,46 @@
+﻿@page "/login"
+@using System.IO
+
+<h3>Create Folder on Desktop</h3>
+
+<button @onclick="CreateFolderOnDesktop">Create Folder</button>
+<p>@message</p>
+
+@code {
+    private string message = string.Empty;
+
+    private async Task CreateFolderOnDesktop()
+    {
+        try
+        {
+            
+            string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+
+            
+            string myFolder = Path.Combine(desktopPath, "MyDesktopFolder");
+
+            
+            if (!Directory.Exists(myFolder))
+            {
+                Directory.CreateDirectory(myFolder);
+                message = "Folder created successfully on the desktop.";
+            }
+            else
+            {
+                message = "The folder already exists.";
+            }
+
+            
+            string filePath = Path.Combine(myFolder, "example.txt");
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, "This is a test file inside the desktop folder.");
+                message += " File created successfully.";
+            }
+        }
+        catch (Exception ex)
+        {
+            message = $"Error: {ex.Message}";
+        }
+    }
+}
